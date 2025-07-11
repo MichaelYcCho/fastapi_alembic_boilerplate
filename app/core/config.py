@@ -67,7 +67,7 @@ class Settings(BaseSettings):
     ssh_key_path: Optional[str] = None
     ssh_remote_host: Optional[str] = None
     ssh_remote_port: int = 5432
-    ssh_local_port: int = 5433
+    ssh_local_port: int = 5432
 
     # 기존 NestJS 스타일 bastion 설정도 지원
     bastion_host: Optional[str] = None
@@ -87,7 +87,6 @@ class Settings(BaseSettings):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        print("흠", os.getenv("ENVIRONMENT"), os.getenv("IS_SSH"))
 
         # 환경 변수에서 직접 읽기 (fallback)
         self.ssh_host = self.ssh_host or os.getenv("SSH_HOST")

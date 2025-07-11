@@ -7,7 +7,7 @@ from ..schemas.auth import AuthRequest, TokenResponse, AccessTokenResponse
 from ..schemas.user import UserResponse
 from ..core.security import verify_password, hash_password, create_access_token, create_refresh_token, verify_token
 from ..core.errors import AppError, AUTH_ERRORS, USERS_ERRORS
-from ..config import settings
+from ..core.config import settings
 import time
 
 class AuthService:

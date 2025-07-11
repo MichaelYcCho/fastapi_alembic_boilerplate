@@ -4,10 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 import logging
 from .api import api_router
-from .database import Base, async_engine
+from .core.database.database import Base, async_engine
 from .core.errors import AppError
-from .config import settings
-from .database_manager import db_manager
+from .core.config import settings
+from .core.database.database_manager import db_manager
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)

@@ -1,7 +1,7 @@
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-from ..config import settings
+from .config import settings
 from typing import Optional, Dict, Any
 
 # Password hashing context

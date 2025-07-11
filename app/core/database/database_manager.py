@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-from app.config import settings
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +138,7 @@ class DatabaseManager:
         if not settings.DATABASE_URL:
             raise ValueError("DATABASE_URL이 설정되지 않았습니다.")
         
-        # postgresql://user:pass@host:port/db -> postgresql://user:pass@localhost:5433/db
+        # postgresql://user:pass@host:port/db -> postgresql://user:pass@localhost:2/db
         tunneled_url = re.sub(
             r"@[^:]+:\d+", f"@localhost:{settings.SSH_LOCAL_PORT}", settings.DATABASE_URL
         )
