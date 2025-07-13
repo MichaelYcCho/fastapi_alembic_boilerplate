@@ -1,13 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional, Dict, Any
-from ..repositories.user_repository import UserRepository
-from ..repositories.jwt_repository import JwtRepository
-from ..models.user import User
-from ..schemas.auth import AuthRequest, TokenResponse, AccessTokenResponse
-from ..schemas.user import UserResponse
-from ..core.security import verify_password, hash_password, create_access_token, create_refresh_token, verify_token
-from ..core.errors import AppError, AUTH_ERRORS, USERS_ERRORS
-from ..core.config import settings
+from app.repositories.user_repository import UserRepository
+from app.repositories.jwt_repository import JwtRepository
+from app.users.models.user import User
+from app.schemas.auth import AuthRequest, TokenResponse, AccessTokenResponse
+from app.schemas.user import UserResponse
+from app.core.security import verify_password, hash_password, create_access_token, create_refresh_token, verify_token
+from app.core.errors import AppError, AUTH_ERRORS, USERS_ERRORS
+from app.core.config import settings
 import time
 
 class AuthService:

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from ..core.database.database import Base
+from app.core.database.database import Base
 
 class JwtStorage(Base):
     __tablename__ = "jwt_storage"
@@ -17,4 +17,4 @@ class JwtStorage(Base):
     deleted_at = Column(DateTime(timezone=True), nullable=True)
     
     # Relationships
-    user = relationship("User", back_populates="jwt_storage") 
+    user = relationship("User", back_populates="jwt_storage")

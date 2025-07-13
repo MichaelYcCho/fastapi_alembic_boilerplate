@@ -6,6 +6,8 @@ from app.users.models.user import User
 
 
 class UserRepository:
+    """사용자 데이터베이스 접근을 담당하는 Repository 클래스"""
+    
     def __init__(self, db: AsyncSession):
         self.db = db
     

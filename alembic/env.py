@@ -17,8 +17,8 @@ from app.core.config import settings
 from app.core.database.database_manager import db_manager
 
 # 모델들을 명시적으로 import (Alembic이 테이블을 인식하도록)
-from app.models.user import User
-from app.models.jwt_storage import JwtStorage
+from app.users.models.user import User
+from app.auth.models.jwt_storage import JwtStorage
 
 # IDE의 자동 import 정리를 방지하기 위해 명시적으로 사용
 __all__ = ["User", "JwtStorage"]

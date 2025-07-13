@@ -1,8 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 from typing import Optional
-from ..models.jwt_storage import JwtStorage
-from ..models.user import User
+from app.auth.models.jwt_storage import JwtStorage
 
 class JwtRepository:
     def __init__(self, db: AsyncSession):
