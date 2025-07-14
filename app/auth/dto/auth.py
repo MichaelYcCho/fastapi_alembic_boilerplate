@@ -1,6 +1,8 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
-from .user import UserResponse
+
+from app.users.dto.user_dto import UserResponseDto
+
 
 class AuthRequest(BaseModel):
     email: EmailStr = Field(..., description="사용자 이메일")
@@ -9,7 +11,7 @@ class AuthRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str
-    user: UserResponse
+    user: UserResponseDto
 
 class AccessTokenResponse(BaseModel):
     access_token: str

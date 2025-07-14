@@ -3,11 +3,13 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 import logging
-from .api import api_router
-from .core.database.database import Base, async_engine
-from .core.errors import AppError
-from .core.config import settings
-from .core.database.database_manager import db_manager
+
+from app.core.database.database import async_engine
+from app.core.errors import AppError
+from app.core.config import settings
+from app.core.database.database_manager import db_manager, Base
+from app.auth.routers.auth_router import auth_router
+from app.users.routers.user_router import users_router
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -73,7 +75,9 @@ async def general_exception_handler(request: Request, exc: Exception):
     )
 
 # 라우터 등록
-app.include_router(api_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api/v1/auth")
+app.include_router(users_router, prefix="/api/v1/users")
+
 
 # 헬스 체크 엔드포인트
 @app.get("/health-check")

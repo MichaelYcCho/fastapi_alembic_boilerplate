@@ -1,14 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional, Dict, Any
-from app.repositories.user_repository import UserRepository
-from app.repositories.jwt_repository import JwtRepository
+from app.users.repositories.user_repository import UserRepository
+from app.auth.repositories.jwt_repository import JwtRepository
 from app.users.models.user import User
-from app.schemas.auth import AuthRequest, TokenResponse, AccessTokenResponse
-from app.schemas.user import UserResponse
+from app.auth.dto.auth import AuthRequest, TokenResponse, AccessTokenResponse
+from app.users.dto.user_dto import UserResponseDto
 from app.core.security import verify_password, hash_password, create_access_token, create_refresh_token, verify_token
 from app.core.errors import AppError, AUTH_ERRORS, USERS_ERRORS
 from app.core.config import settings
 import time
+
+
 
 class AuthService:
     def __init__(self, db: AsyncSession):
@@ -43,7 +45,7 @@ class AuthService:
         return TokenResponse(
             access_token=access_token,
             refresh_token=refresh_token,
-            user=UserResponse.from_orm(user)
+            user=UserResponseDto.from_orm(user)
         )
     
     async def update_refresh_token(self, user: User, refresh_token: str) -> None:

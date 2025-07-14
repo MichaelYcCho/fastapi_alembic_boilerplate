@@ -1,10 +1,7 @@
 from sqlalchemy import Column, Integer, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-
 from app.utils.date_handler import get_kst_now
+from app.core.database.database_manager import Base
 
-
-Base = declarative_base()
 
 class BaseModel(Base):
     """기본 모델 클래스"""

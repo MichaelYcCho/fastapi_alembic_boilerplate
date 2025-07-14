@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
-from app.repositories.jwt_repository import JwtRepository
+from app.auth.repositories.jwt_repository import JwtRepository
 from app.users.models.user import User
 from app.core.security import hash_password
 from app.core.errors import AppError, USERS_ERRORS
