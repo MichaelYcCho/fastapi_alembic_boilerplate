@@ -15,10 +15,24 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     """비밀번호를 검증합니다."""
     return pwd_context.verify(plain_password, hashed_password)
 
+import re
+
+def _parse_expiration_time(time_str: str) -> int:
+    """환경변수에서 시간을 파싱합니다. (예: '11000000s' -> 11000000)"""
+    if not time_str:
+        return 3600
+    
+    # 숫자만 추출
+    match = re.search(r'(\d+)', time_str)
+    if match:
+        return int(match.group(1))
+    return 3600
+
 def create_access_token(data: Dict[str, Any]) -> str:
     """액세스 토큰을 생성합니다."""
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(seconds=settings.JWT_ACCESS_EXPIRATION_TIME)
+    expiration_time = _parse_expiration_time(settings.JWT_ACCESS_EXPIRATION_TIME)
+    expire = datetime.now(timezone.utc) + timedelta(seconds=expiration_time)
     to_encode.update({"exp": expire})
     
     encoded_jwt = jwt.encode(to_encode, settings.JWT_ACCESS_SECRET, algorithm="HS256")
@@ -27,7 +41,8 @@ def create_access_token(data: Dict[str, Any]) -> str:
 def create_refresh_token(data: Dict[str, Any]) -> str:
     """리프레시 토큰을 생성합니다."""
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(seconds=settings.JWT_REFRESH_EXPIRATION_TIME)
+    expiration_time = _parse_expiration_time(settings.JWT_REFRESH_EXPIRATION_TIME)
+    expire = datetime.now(timezone.utc) + timedelta(seconds=expiration_time)
     to_encode.update({"exp": expire})
     
     encoded_jwt = jwt.encode(to_encode, settings.JWT_REFRESH_SECRET, algorithm="HS256")
