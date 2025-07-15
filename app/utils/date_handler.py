@@ -1,11 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 
 def get_kst_now() -> datetime:
     """현재 KST(한국 표준시) 시간을 반환합니다 (naive datetime)."""
     # UTC + 9시간 = KST (naive datetime으로 DB에 저장)
-    return datetime.now(datetime.UTC) + timedelta(hours=9)
+    return datetime.now(timezone.utc) + timedelta(hours=9)
 
 
 def format_kst_datetime(

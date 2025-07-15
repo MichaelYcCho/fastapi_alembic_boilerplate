@@ -2,7 +2,7 @@
 
 Revision ID: 001
 Revises: 
-Create Date: 2025-07-14 21:15:06.205767
+Create Date: 2025-07-15 20:05:14.548736
 
 """
 from alembic import op
@@ -25,8 +25,8 @@ def upgrade() -> None:
     sa.Column('role', sa.String(length=20), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=True, comment='생성 시간'),
-    sa.Column('updated_at', sa.DateTime(), nullable=True, comment='수정 시간'),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=True, comment='생성 시간'),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True, comment='수정 시간'),
     sa.Column('deleted_at', sa.DateTime(), nullable=True, comment='삭제 시간'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -38,8 +38,8 @@ def upgrade() -> None:
     sa.Column('refresh_token_expired_at', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=True, comment='생성 시간'),
-    sa.Column('updated_at', sa.DateTime(), nullable=True, comment='수정 시간'),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=True, comment='생성 시간'),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True, comment='수정 시간'),
     sa.Column('deleted_at', sa.DateTime(), nullable=True, comment='삭제 시간'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
