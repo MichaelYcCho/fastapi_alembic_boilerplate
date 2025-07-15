@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
 from app.auth.repositories.jwt_repository import JwtRepository
 from app.users.models.user import User
 from app.core.security import hash_password
@@ -15,14 +14,14 @@ class UserService:
     
     def __init__(self, db: AsyncSession):
         self.db = db
-        self.user_repo = UserRepository(db)
-        self.jwt_repo = JwtRepository(db)
+        self.user_repository = UserRepository(db)
+        self.jwt_repository = JwtRepository(db)
     
     async def create_user(self, user_create: UserCreateDto) -> dict:
         """사용자를 생성합니다."""
         try:
             # 이메일 중복 확인
-            existing_user = await self.user_repo.get_user_by_email(user_create.email)
+            existing_user = await self.user_repository.get_user_by_email(user_create.email)
             if existing_user:
                 raise AppError(USERS_ERRORS["USER_EMAIL_ALREADY_EXIST"])
             
@@ -36,13 +35,16 @@ class UserService:
                 "profile_name": user_create.profile_name
             }
             
-            user = await self.user_repo.create_user(user_data)
+            user = await self.user_repository.create_user(user_data)
             
             # JWT 저장소 생성
-            await self.jwt_repo.create_jwt_storage(user.id)
+            await self.jwt_repository.create_jwt_storage(user.id)
             
             logger.info(f"[CreateUser] Success: {user.email}")
-            return {"message": "success"}
+            return {
+                "id": user.id,
+                "message": "success",
+            }
         
         except AppError:
             raise
@@ -53,11 +55,11 @@ class UserService:
     async def get_user_by_id(self, user_id: int) -> UserResponseDto:
         """사용자를 ID로 조회합니다."""
         try:
-            user = await self.user_repo.get_user_by_id(user_id)
+            user = await self.user_repository.get_user_by_id(user_id)
             if not user:
                 raise AppError(USERS_ERRORS["NOT_EXIST_USER"])
             
-            return UserResponseDto.from_orm(user)
+            return UserResponseDto.model_validate(user)
         
         except AppError:
             raise
@@ -68,13 +70,13 @@ class UserService:
     async def get_users_list(self, skip: int = 0, limit: int = 100) -> UserListResponseDto:
         """사용자 목록을 조회합니다."""
         try:
-            users = await self.user_repo.get_users_list(skip, limit)
-            total_count = await self.user_repo.get_users_count()
+            users = await self.user_repository.get_users_list(skip, limit)
+            total_count = await self.user_repository.get_users_count()
             
-            user_dtos = [UserResponseDto.from_orm(user) for user in users]
+            user_dto_list = [UserResponseDto.model_validate(user) for user in users]
             
             return UserListResponseDto(
-                users=user_dtos,
+                users=user_dto_list,
                 total_count=total_count,
                 skip=skip,
                 limit=limit
@@ -84,17 +86,17 @@ class UserService:
             logger.error(f"[GetUsersList] Error: {str(e)}")
             raise AppError(USERS_ERRORS["FAILED_GET_USER_PROFILE"])
     
-    async def update_user(self, user: User, user_update: UserUpdateDto) -> UserResponseDto:
+    async def update_user(self, user: User, update_dto: UserUpdateDto) -> UserResponseDto:
         """사용자 정보를 업데이트합니다."""
         try:
-            if user_update.profile_name is not None:
-                user.profile_name = user_update.profile_name
+            if update_dto.profile_name is not None:
+                user.profile_name = update_dto.profile_name
             
-            if user_update.role is not None:
-                user.role = user_update.role
+            if update_dto.role is not None:
+                user.role = update_dto.role
             
-            updated_user = await self.user_repo.update_user(user)
-            return UserResponseDto.from_orm(updated_user)
+            updated_user = await self.user_repository.update_user(user)
+            return UserResponseDto.model_validate(updated_user)
         
         except AppError:
             raise
@@ -105,7 +107,7 @@ class UserService:
     async def delete_user(self, user: User) -> dict:
         """사용자를 삭제합니다."""
         try:
-            await self.user_repo.delete_user(user)
+            await self.user_repository.delete_user(user)
             logger.info(f"[DeleteUser] Success: {user.email}")
             return {"message": "success"}
         
