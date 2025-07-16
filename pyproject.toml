@@ -21,8 +21,28 @@ dependencies = [
     "passlib[bcrypt] (>=1.7.4,<2.0.0)",
     "python-jose (>=3.5.0,<4.0.0)",
     "greenlet (>=3.2.3,<4.0.0)",
+    "pytest (>=8.4.1,<9.0.0)",
+    "pytest-asyncio (>=0.21.0,<0.22.0)",
+    "pytest-cov (>=4.0.0,<5.0.0)",
+    "httpx (>=0.24.0,<0.25.0)",
+    "factory-boy (>=3.3.0,<4.0.0)",
 ]
 
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--tb=short",
+    "--cov=app",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--asyncio-mode=auto",
+]
+asyncio_mode = "auto"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
