@@ -45,7 +45,6 @@ class AuthService:
         return TokenResponse(
             access_token=access_token,
             refresh_token=refresh_token,
-            user=UserResponseDto.from_orm(user)
         )
     
     async def update_refresh_token(self, user: User, refresh_token: str) -> None:
